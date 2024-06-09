@@ -1,11 +1,11 @@
 const { nanoid } = require('nanoid')
 const books = require('./books')
 
-const addBookHandler = (request, h) => {
+const addBookHandler = (request, handler) => {
 	const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload
 
 	if (!name) {
-		const response = h.response({
+		const response = handler.response({
 			status: 'fail',
 			message: 'Gagal menambahkan buku. Mohon isi nama buku'
 		})
@@ -14,7 +14,7 @@ const addBookHandler = (request, h) => {
 	}
 
 	if (readPage > pageCount) {
-		const response = h.response({
+		const response = handler.response({
 			status: 'fail',
 			message: 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount'
 		})
@@ -44,7 +44,7 @@ const addBookHandler = (request, h) => {
 
 	books.push(newBook)
 
-	const response = h.response({
+	const response = handler.response({
 		status: 'success',
 		message: 'Buku berhasil ditambahkan',
 		data: {
@@ -55,7 +55,7 @@ const addBookHandler = (request, h) => {
 	return response;
 }
 
-const getAllBooksHandler = (request, h) => {
+const getAllBooksHandler = (request, handler) => {
 	const { name, reading, finished } = request.query;
 
 	let filteredBooks = books
@@ -67,7 +67,6 @@ const getAllBooksHandler = (request, h) => {
 	}
 
 	if (reading !== undefined) {
-
 		filteredBooks = filteredBooks.filter(
 			(book) => book.reading === (reading === '1')
 		)
@@ -79,7 +78,7 @@ const getAllBooksHandler = (request, h) => {
 		)
 	}
 
-	const response = h.response({
+	const response = handler.response({
 		status: 'success',
 		data: {
 			books: filteredBooks.map((book) => ({
@@ -93,13 +92,13 @@ const getAllBooksHandler = (request, h) => {
 	return response
 }
 
-const getBookByIdHandler = (request, h) => {
+const getBookByIdHandler = (request, handler) => {
 	const { bookId } = request.params
 
 	const book = books.find((b) => b.id === bookId)
 
 	if (book) {
-		const response = h.response({
+		const response = handler.response({
 			status: 'success',
 			data: {
 				book
@@ -109,7 +108,7 @@ const getBookByIdHandler = (request, h) => {
 		return response
 	}
 
-	const response = h.response({
+	const response = handler.response({
 		status: 'fail',
 		message: 'Buku tidak ditemukan'
 	})
@@ -117,12 +116,12 @@ const getBookByIdHandler = (request, h) => {
 	return response
 }
 
-const updateBookByIdHandler = (request, h) => {
+const updateBookByIdHandler = (request, handler) => {
 	const { bookId } = request.params
 	const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload
 
 	if (!name) {
-		const response = h.response({
+		const response = handler.response({
 			status: 'fail',
 			message: 'Gagal memperbarui buku. Mohon isi nama buku'
 		})
@@ -131,7 +130,7 @@ const updateBookByIdHandler = (request, h) => {
 	}
 
 	if (readPage > pageCount) {
-		const response = h.response({
+		const response = handler.response({
 			status: 'fail',
 			message: 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount'
 		})
@@ -155,7 +154,7 @@ const updateBookByIdHandler = (request, h) => {
 			updatedAt: new Date().toISOString()
 		}
 
-		const response = h.response({
+		const response = handler.response({
 			status: 'success',
 			message: 'Buku berhasil diperbarui'
 		})
@@ -163,7 +162,7 @@ const updateBookByIdHandler = (request, h) => {
 		return response
 	}
 
-	const response = h.response({
+	const response = handler.response({
 		status: 'fail',
 		message: 'Gagal memperbarui buku. Id tidak ditemukan'
 	})
@@ -171,14 +170,14 @@ const updateBookByIdHandler = (request, h) => {
 	return response
 }
 
-const deleteBookByIdHandler = (request, h) => {
+const deleteBookByIdHandler = (request, handler) => {
 	const { bookId } = request.params
 
 	const index = books.findIndex((book) => book.id === bookId)
 
 	if (index !== -1) {
 		books.splice(index, 1)
-		const response = h.response({
+		const response = handler.response({
 			status: 'success',
 			message: 'Buku berhasil dihapus'
 		})
@@ -186,7 +185,7 @@ const deleteBookByIdHandler = (request, h) => {
 		return response
 	}
 
-	const response = h.response({
+	const response = handler.response({
 		status: 'fail',
 		message: 'Buku gagal dihapus. Id tidak ditemukan'
 	})
