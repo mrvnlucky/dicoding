@@ -61,21 +61,15 @@ const getAllBooksHandler = (request, handler) => {
 	let filteredBooks = books
 
 	if (name !== undefined) {
-		filteredBooks = filteredBooks.filter((book) =>
-			book.name.toLowerCase().includes(name.toLowerCase())
-		);
+		filteredBooks = filteredBooks.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
 	}
 
 	if (reading !== undefined) {
-		filteredBooks = filteredBooks.filter(
-			(book) => book.reading === (reading === '1')
-		)
+		filteredBooks = filteredBooks.filter((book) => book.reading === (reading === '1'));
 	}
 
 	if (finished !== undefined) {
-		filteredBooks = filteredBooks.filter(
-			(book) => book.finished === (finished === '1')
-		)
+		filteredBooks = filteredBooks.filter((book) => book.finished === (finished === '1'));
 	}
 
 	const response = handler.response({
