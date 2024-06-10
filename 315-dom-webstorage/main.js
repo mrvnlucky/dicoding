@@ -1,5 +1,4 @@
-let books = [];
-
+let books = JSON.parse(localStorage.getItem('books')) || [];
 function addBook() {
 	const title = document.getElementById('inputBookTitle').value;
 	const author = document.getElementById('inputBookAuthor').value;
@@ -17,7 +16,6 @@ function addBook() {
 	const books = JSON.parse(localStorage.getItem('books')) || [];
 	books.push(book);
 	localStorage.setItem('books', JSON.stringify(books));
-
 	displayBooks();
 	alert('Buku berhasil ditambahkan');
 }
@@ -74,6 +72,51 @@ function searchBook() {
 	const filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchInput.toLowerCase()));
 	displayBooks(filteredBooks);
 	console.log(filteredBooks)
+}
+
+function editBook(bookId) {
+	const bookElement = document.querySelector(`[data-id="${bookId}"]`);
+	if (!bookElement) return;
+
+	const book = JSON.parse(localStorage.getItem('books')).find(book => book.id === bookId);
+	if (!book) return;
+
+	bookElement.innerHTML = `
+        <form id="editBookForm">
+			<div> 
+				<label for="editBookTitleInput">Judul : </label>
+				<input type="text" id="editBookTitleInput" name="title" value="${book.title}">
+			</div>
+			<div>
+				<label for="editBookAuthorInput">Penulis : </label>
+            	<input type="text" id="editBookAuthorInput" name="author" value="${book.author}">
+			</div>
+			<div>
+				<label for="editBookYearInput">Tahun : </label>
+            	<input type="number" id="editBookYearInput" name="year" value="${book.year}">
+			</div>
+            <button type="submit">Save</button>
+        </form>
+    `;
+
+	const form = bookElement.querySelector('#editBookForm');
+	form.onsubmit = function (e) {
+		e.preventDefault();
+		// Implement saving logic here
+		const updatedBook = {
+			id: book.id,
+			title: document.getElementById('editBookTitleInput').value,
+			author: document.getElementById('editBookAuthorInput').value,
+			year: document.getElementById('editBookYearInput').value,
+			isComplete: book.isComplete
+		};
+
+		const bookIndex = books.findIndex(book => book.id === bookId);
+		books[bookIndex] = updatedBook;
+
+		localStorage.setItem('books', JSON.stringify(books));
+		displayBooks();
+	};
 }
 
 // Event Listeners
