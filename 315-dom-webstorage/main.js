@@ -21,7 +21,7 @@ function addBook() {
 }
 
 function displayBooks(booksParam) {
-	const books = booksParam || JSON.parse(localStorage.getItem('books')) || [];
+	const books = booksParam || JSON.parse(localStorage.getItem('books'));
 
 	const incompleteShelf = document.getElementById('incompleteBookshelfList');
 	const completeShelf = document.getElementById('completeBookshelfList');
@@ -75,6 +75,7 @@ function searchBook() {
 }
 
 function editBook(bookId) {
+
 	const bookElement = document.querySelector(`[data-id="${bookId}"]`);
 	if (!bookElement) return;
 
@@ -103,6 +104,7 @@ function editBook(bookId) {
 	form.onsubmit = function (e) {
 		e.preventDefault();
 		// Implement saving logic here
+		let books = JSON.parse(localStorage.getItem('books')) || [];
 		const updatedBook = {
 			id: book.id,
 			title: document.getElementById('editBookTitleInput').value,
