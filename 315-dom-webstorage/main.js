@@ -2,7 +2,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [];
 function addBook() {
 	const title = document.getElementById('inputBookTitle').value;
 	const author = document.getElementById('inputBookAuthor').value;
-	const year = document.getElementById('inputBookYear').value;
+	const year = parseInt(document.getElementById('inputBookYear').value);
 	const isComplete = document.getElementById('inputBookIsComplete').checked;
 
 	const book = {
@@ -107,7 +107,7 @@ function editBook(bookId) {
 			id: book.id,
 			title: document.getElementById('editBookTitleInput').value,
 			author: document.getElementById('editBookAuthorInput').value,
-			year: document.getElementById('editBookYearInput').value,
+			year: parseInt(document.getElementById('editBookYearInput').value),
 			isComplete: book.isComplete
 		};
 
