@@ -1,15 +1,16 @@
 let books = JSON.parse(localStorage.getItem('books')) || [];
+
 function addBook() {
 	const title = document.getElementById('inputBookTitle').value;
 	const author = document.getElementById('inputBookAuthor').value;
-	const year = parseInt(document.getElementById('inputBookYear').value);
+	const year = document.getElementById('inputBookYear').value;
 	const isComplete = document.getElementById('inputBookIsComplete').checked;
 
 	const book = {
 		id: +new Date(),
 		title,
 		author,
-		year,
+		year: Number(year),
 		isComplete
 	};
 
